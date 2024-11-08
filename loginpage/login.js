@@ -13,7 +13,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     alert('Login successful!'); 
 
     // Ensure the redirection URL is correct
-    window.location.href = './homepage/index.html'; // Adjust this URL as needed
+    window.location.href = '../homepage/index.html'; // Adjust this URL as needed
 });
 
 document.getElementById('forgotPassword').addEventListener('click', function() {
