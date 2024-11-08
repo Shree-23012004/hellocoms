@@ -1,0 +1,149 @@
+<!-- cart.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - KA28 Spices</title>
+    <style>
+        .cart-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            gap: 20px;
+        }
+
+        .cart-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            padding: 5px 10px;
+            background-color: #EFC14C;
+            border: none;
+            cursor: pointer;
+        }
+
+        .remove-btn {
+            padding: 5px 10px;
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cart-summary {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .checkout-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #EFC14C;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="cart-container">
+        <h1>Your Cart</h1>
+        <div id="cart-items">
+            <!-- Cart items will be dynamically added here -->
+        </div>
+        <div class="cart-summary">
+            <h3>Cart Summary</h3>
+            <p>Subtotal: ₹<span id="subtotal">0</span></p>
+            <p>GST (18%): ₹<span id="tax">0</span></p>
+            <h4>Total: ₹<span id="total">0</span></h4>
+            <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <script>
+        // Load cart items from localStorage
+        let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+      
+        function renderCart() {
+          const cartContainer = document.getElementById('cart-items');
+          cartContainer.innerHTML = '';
+      
+          cartItems.forEach((item, index) => {
+            const itemElement = `
+              <div class="cart-item">
+                <div class="item-details">
+                  <h3>${item.name}</h3>
+                  <p>₹${item.price}</p>
+                </div>
+                <div class="quantity-controls">
+                  <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                  <span>${item.quantity || 1}</span>
+                  <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                </div>
+                <p>₹${(item.price * (item.quantity || 1)).toFixed(2)}</p>
+                <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+              </div>
+            `;
+            cartContainer.innerHTML += itemElement;
+          });
+      
+          updateTotals();
+        }
+      
+        function updateQuantity(itemIndex, change) {
+          cartItems[itemIndex].quantity = (cartItems[itemIndex].quantity || 1) + change;
+          if (cartItems[itemIndex].quantity < 1) cartItems[itemIndex].quantity = 1;
+          localStorage.setItem('cart', JSON.stringify(cartItems));
+          renderCart();
+        }
+      
+        function removeItem(itemIndex) {
+          cartItems.splice(itemIndex, 1);
+          localStorage.setItem('cart', JSON.stringify(cartItems));
+          renderCart();
+        }
+      
+        function updateTotals() {
+          const subtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+          const tax = subtotal * 0.18; // 18% GST
+          const total = subtotal + tax;
+      
+          document.getElementById('subtotal').textContent = subtotal.toFixed(2);
+          document.getElementById('tax').textContent = tax.toFixed(2);
+          document.getElementById('total').textContent = total.toFixed(2);
+        }
+      
+        function checkout() {
+          alert('Proceeding to checkout...');
+          // Add checkout logic here
+        }
+      
+        // Initial render
+        renderCart();
+      </script>
+</body>
+</html>

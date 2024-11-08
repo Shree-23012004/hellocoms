@@ -1,0 +1,10 @@
+{
+    "name": "online-furniture-store-template",
+    "version": "1.0.0",
+    "private": true,
+    "dependencies": {
+        "online-furniture-store-template": "file:",
+        "parcel-bundler": "^1.6.1"
+    },
+    "scripts": {}
+}
